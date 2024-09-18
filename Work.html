@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>My work</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --menu-color: #c1c1c1;
+            --wallpaper-color: #007f7f;
+            --terminal-background-color: black;
+            --terminal-font-color: azure;
+            --terminal-head-starter-color: #00007f;
+            --terminal-head-end-color: #1083ce;
+            --note-background-color: white;
+            --note-font-color: black;
+        }
+
+        @font-face {
+            font-family: Cascadia;
+            src: url("font/CascadiaMonoPL-Regular.otf");
+        }
+
+        body {
+            background: var(--wallpaper-color);
+            font-family: Cascadia, sans-serif;
+        }
+
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: var(--menu-color);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            border-top: solid 2px #f7f7f7;
+        }
+
+        .footer-icon, .footer-terminal-icon, .footer-notes-icon {
+            height: 90%;
+            object-fit: contain;
+            margin-left: 2px;
+            cursor: pointer;
+        }
+
+        .desktop {
+            display: flex;
+            align-items: center;
+            height: 70px;
+            width: 130px;
+            padding-top: 5px;
+            padding-left: 5px;
+            user-select: none;
+            cursor: pointer;
+        }
+
+        .desktop-icon {
+            height: 50px;
+            width: auto;
+        }
+
+        .terminal-desktop {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--terminal-font-color);
+        }
+        .desktop-text{
+            margin-top: 8px;
+        }
+
+        .terminal-tab {
+            visibility: hidden;
+            position: fixed;
+            top: 10%;
+            left: 10%;
+            display: grid;
+            grid-template-rows: 25px;
+            user-select: none;
+            z-index: 5;
+            width: 60%;
+            height: 70%;
+            border: solid 4px var(--menu-color);
+            box-shadow: -2px -2px 0 #e8e8e8,
+            -2px -2px 0 #b1b1b1,
+            2px 2px 0 #7a7a7a,
+            2px 2px 0 #3e3e3e;
+        }
+
+        .terminal-close-tab-icon, .note-close-tab-icon, .terminal-hiding-tab-icon, .terminal-sizing-tab-icon, .note-hiding-tab-icon, .note-sizing-tab-icon, .terminal-tab-icon, .note-tab-icon{
+            height: 18px;
+            width: auto;
+            display: block;
+            cursor: pointer;
+        }
+        .terminal-option{
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, var(--terminal-head-starter-color) 40%, var(--terminal-head-end-color) 100%);
+            color: var(--terminal-font-color);
+            padding: 0.5%;
+            grid-column: 1;
+            grid-row: 1;
+            border-bottom: solid 5px var(--menu-color);
+            gap: 4px;
+            cursor: grab;
+        }
+
+        .tab-text {
+            text-align: left;
+            white-space: nowrap;
+            flex-grow: 1;
+        }
+
+        .terminal-option,.terminal-screen, .note-option, .note-option2, .note-screen{box-sizing: border-box}
+
+        .terminal-screen {
+            background: var(--terminal-background-color);
+            color: var(--terminal-font-color);
+            padding: 1%;
+            grid-column: 1;
+            grid-row: 2;
+            border: solid 1px black;
+            box-shadow: -2px 0 0 grey,
+            0 -2px 0 grey,
+            2px 0 0 white,
+            0 2px 0 white;
+            overflow-y: auto;
+        }
+        .note-tab-4{
+            z-index: 1;
+        }
+        .note-tab-3{
+            z-index: 2;
+        }
+        .note-tab-2 {
+            z-index: 3;
+        }
+        .note-tab-1{
+            z-index: 4;
+        }
+        .note-tab-3{
+            visibility: visible;
+            position: fixed;
+            width: 40%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            display: grid;
+            grid-template-rows: 25px 45px;
+            user-select: none;
+            border: solid 4px var(--menu-color);
+            box-shadow: -2px -2px 0 #e8e8e8,
+            -2px -2px 0 #b1b1b1,
+            2px 2px 0 #7a7a7a,
+            2px 2px 0 #3e3e3e;
+        }
+        .note-tab-1, .note-tab-2, .note-tab-4 {
+            visibility: hidden;
+            position: fixed;
+            width: 40%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            display: grid;
+            grid-template-rows: 25px 45px;
+            user-select: none;
+            border: solid 4px var(--menu-color);
+            box-shadow: -2px -2px 0 #e8e8e8,
+                        -2px -2px 0 #b1b1b1,
+                        2px 2px 0 #7a7a7a,
+                        2px 2px 0 #3e3e3e;
+        }
+
+        .note-option {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(to right, var(--terminal-head-starter-color) 40%, var(--terminal-head-end-color) 100%);
+            color: var(--terminal-font-color);
+            padding: 0.5%;
+            grid-column: 1;
+            grid-row: 1;
+            gap: 4px;
+        }
+        .note-option2 {
+            display: flex;
+            align-items: center;
+            background: var(--menu-color);
+            color: var(--note-font-color);
+            padding-left: 2.5%;
+            grid-column: 1;
+            grid-row: 2;
+            gap: 1.5vw;
+        }
+
+        .note-screen{
+            background: var(--note-background-color);
+            color: var(--note-font-color);
+            padding: 1%;
+            grid-column: 1;
+            grid-row: 3;
+            border: solid 1px black;
+            box-shadow: -2px 0 0 grey,
+                        0 -2px 0 grey,
+                        2px 0 0 white,
+                        0 2px 0 white;
+            overflow-y: auto;
+            overflow-x: clip;
+            user-select: text;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--terminal-font-color);
+        }
+
+        .grid-selectable-text {
+            display: grid;
+            grid-template-columns: 200px;
+            line-height: 130%;
+        }
+        .project-name, .project-date{
+            cursor: pointer;
+        }
+
+        .project-date {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .project-name {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .SCC_Video{
+            width: 37.5vw;
+            display: block;
+            border: solid 1px black;
+            cursor: pointer;
+        }
+
+        .image{
+            width: 98%;
+            display: block;
+            border: solid 1px black;
+        }
+
+        ::-webkit-scrollbar{
+            width: 20px;
+        }
+        ::-webkit-scrollbar-track-piece{
+            background: #dfddde;
+        }
+        ::-webkit-scrollbar-thumb{
+            align-items: center;
+            background: #c2c0c2;
+            border: solid 1px #3e3e3e;
+            border-right: none;
+            box-shadow: -2px 0 0 #6c6c6c inset,
+            0 -2px 0 #6c6c6c inset,
+            2px 0 0 #ededed inset,
+            0 2px 0 #ededed inset;
+        }
+        ::-webkit-scrollbar-button{
+            background: #c2c0c2;
+            height: 20px;
+            border: solid 1px #3e3e3e;
+            border-right: none;
+            box-shadow: -2px 0 0 #6c6c6c inset,
+            0 -2px 0 #6c6c6c inset,
+            2px 0 0 #ededed inset,
+            0 2px 0 #ededed inset;
+        }
+
+    </style>
+    <script src="Work.js" type="module"></script>
+</head>
+<body>
+
+    <footer class="footer">
+        <img src="icon/start_icon.jpg" alt="terminal" class="footer-icon">
+        <img src="icon/Terminal_icon.png" alt="terminal" class="footer-terminal-icon">
+        <img src="icon/notes_icon.png" alt="terminal" class="footer-notes-icon">
+    </footer>
+    <div class="desktop">
+        <div class="terminal-desktop">
+            <img src="icon/Terminal_icon.png" alt="terminal" class="desktop-icon">
+            <div class="desktop-text">MS-DOS Prompt</div>
+        </div>
+    </div>
+
+    <div class="terminal-tab">
+        <div class="terminal-option">
+            <img src="icon/Terminal_icon.png" alt="terminal" class="terminal-tab-icon">
+            <span class="tab-text">MS-DOS Prompt</span>
+            <img src="icon/hiding.png" alt="terminal" class="terminal-hiding-tab-icon">
+            <img src="icon/sizing.png" alt="terminal" class="terminal-sizing-tab-icon">
+            <img src="icon/close_tab.png" alt="terminal" class="terminal-close-tab-icon">
+        </div>
+        <div class="terminal-screen">
+            <div>Majurax PowerShell</div>
+            <div>Copyright (C) Majurax Portfolio Corporation. All rights deserved.</div><br>
+            <div>C:\Users\Majurax> dir My_projects</div><br>
+            <div> Directory of C:\Users\Majurax\My_projects</div><br>
+            <div class="grid-selectable-text">
+                <div class="project-date">
+                    <div class="project-1">January 2024</div>
+                    <div class="project-2">September 2023</div>
+                    <div class="project-3">May 2024</div>
+                    <div class="project-4">September 2023</div>
+                </div>
+                <div class="project-name">
+                    <div class="project-1">Chicken coop</div>
+                    <div class="project-2">Creation of a binary classification IA</div>
+                    <div class="project-3">Playtrays</div>
+                    <div class="project-4">Redaction on the topic: How does IA works</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="note-tab-1">
+        <div class="note-option">
+            <img src="icon/notes_icon.png" alt="terminal" class="note-tab-icon">
+            <span class="tab-text">Chicken Coop - NotePad</span>
+            <img src="icon/hiding.png" alt="terminal" class="note-hiding-tab-icon">
+            <img src="icon/sizing.png" alt="terminal" class="note-sizing-tab-icon">
+            <img src="icon/close_tab.png" alt="terminal" class="note-close-tab-icon">
+        </div>
+        <div class="note-option2">
+            <h4><span style="text-decoration: underline">F</span>ile</h4>
+            <h4><span style="text-decoration: underline">E</span>dit</h4>
+            <h4><span style="text-decoration: underline">S</span>earch</h4>
+            <h4><span style="text-decoration: underline">H</span>elp</h4>
+        </div>
+        <div class="note-screen">
+            <h3>The chicken coop:</h3>
+            <div>A school project by me and 4 other people.</div><br>
+            <div>The Chicken Coop is a new way to take care of your chickens. It is a software and hardware combination that integrates AI, Raspberry Pi, Python, and some building skills.</div>
+            <div>The project began at Polytech, my school. My group and the rest of the class were assigned various work proposals. These proposals varied from chemical to mechanical projects.</div>
+            <div>Unfortunately, none of these projects included informatics, which was problematic for our group since we all wanted to pursue that direction in our academic paths.</div>
+            <div>That's why we started looking for projects where we could incorporate informatics. We saw a great opportunity with the following project:</div>
+            <h4>Build a chicken coop that prevents pests from coming in.</h4>
+            <div>We decided to go beyond the issue of pests. Why only prevent pests when larger animals could still enter and cause significant trouble? That's why we decided that anything that isn't a chicken should be stopped from entering.</div><br>
+            <div>Our idea was to create an AI that could detect the presence of chickens and block other animals from entering.</div>
+            <div>We wanted the chicken coop to be useful even without power so that the primary issue would still be addressed.</div>
+            <div>We started with a big meeting among the group to discuss task distribution and begin thinking about the design.</div>
+            <h4>We agreed on the following idea:</h4><br>
+            <canvas id="displayContent" style="display:block; cursor: grab;"></canvas><br>
+            <div>We would install a Raspberry Pi, a camera, a presence detector, and some magnets. The detector would trigger the camera, which would send the photo to an AI in the Raspberry Pi. If a chicken was detected, the magnets would turn off, allowing the door to open.</div>
+            <div>Some of us wanted to create the AI individually, but the time given was too short for us to address all the problems. Although we had the capability to create an AI, we couldn't do it due to a lack of a sufficient database (only 300 images were harvested to train the AI, which wasn't enough).</div>
+            <div>To work around this problem, we used a classification AI from Google that can label a vast number of objects in an image. We just had to check the labels for the presence of chickens.</div>
+            <br><div>Once the software and hardware were ready, we just had to build it. This part was a little tricky since we were almost at the project deadline. We managed to build it within 3 days. Then we conducted tests with all the hardware installed:</div>
+            <br><video autoplay loop muted class="SCC_Video" id="SCC_vid1">
+                <source src="Media/SCC_1.mp4" type="video/mp4"/>
+            </video><br>
+            <video autoplay loop muted class="SCC_Video" id="SCC_vid2">
+                <source src="Media/SCC_2.mp4" type="video/mp4"/>
+            </video>
+        </div>
+    </div>
+
+    <div class="note-tab-2">
+        <div class="note-option">
+            <img src="icon/notes_icon.png" alt="terminal" class="note-tab-icon">
+            <span class="tab-text">Chicken Coop - NotePad</span>
+            <img src="icon/hiding.png" alt="terminal" class="note-hiding-tab-icon">
+            <img src="icon/sizing.png" alt="terminal" class="note-sizing-tab-icon">
+            <img src="icon/close_tab.png" alt="terminal" class="note-close-tab-icon">
+        </div>
+        <div class="note-option2">
+            <h4><span style="text-decoration: underline">F</span>ile</h4>
+            <h4><span style="text-decoration: underline">E</span>dit</h4>
+            <h4><span style="text-decoration: underline">S</span>earch</h4>
+            <h4><span style="text-decoration: underline">H</span>elp</h4>
+        </div>
+        <div class="note-screen">
+            <h3>My first AI:</h3>
+            <div></div><br>
+            </div>
+    </div>
+
+    <div class="note-tab-3">
+        <div class="note-option">
+            <img src="icon/notes_icon.png" alt="terminal" class="note-tab-icon">
+            <span class="tab-text">Chicken Coop - NotePad</span>
+            <img src="icon/hiding.png" alt="terminal" class="note-hiding-tab-icon">
+            <img src="icon/sizing.png" alt="terminal" class="note-sizing-tab-icon">
+            <img src="icon/close_tab.png" alt="terminal" class="note-close-tab-icon">
+        </div>
+        <div class="note-option2">
+            <h4><span style="text-decoration: underline">F</span>ile</h4>
+            <h4><span style="text-decoration: underline">E</span>dit</h4>
+            <h4><span style="text-decoration: underline">S</span>earch</h4>
+            <h4><span style="text-decoration: underline">H</span>elp</h4>
+        </div>
+        <div class="note-screen">
+            <h3>Playtrays:</h3>
+            <div>My second-year final project.</div><br>
+            <div>This project aimed to have us work in groups on a large-scale project. We were instructed to create a website.</div>
+            <div>We opted for a site that grouped various board games: Playtrays</div><br>
+            <img src="Media/playtraylandingpage.png" alt="playtrays-landing-page" class="image"><br>
+            <div>Play Trays is a site designed to recreate the feeling of playing a good board game with others. To do this, the site uses 3D to allow the user to move around the board as they would in real life.</div>
+            <br><img src="Media/monop.png" alt="playtrays-landing-page" class="image">
+            <br><img src="Media/checkers.png" alt="playtrays-landing-page" class="image"><br>
+            <div>I took care of the database modeling and UML with one of my classmates.</div>
+            <br><img src="Media/PlaytraysUML.jpeg" alt="playtrays-landing-page" class="image">
+            <br><img src="Media/PlaytraysDBL.png" alt="playtrays-landing-page" class="image"><br>
+            <div>This work allowed me to become familiar with HTML, CSS, TypeScript, and some of its libraries, mainly THREEJS.</div>
+        </div>
+    </div>
+
+    <div class="note-tab-4">
+        <div class="note-option">
+            <img src="icon/notes_icon.png" alt="terminal" class="note-tab-icon">
+            <span class="tab-text">Chicken Coop - NotePad</span>
+            <img src="icon/hiding.png" alt="terminal" class="note-hiding-tab-icon">
+            <img src="icon/sizing.png" alt="terminal" class="note-sizing-tab-icon">
+            <img src="icon/close_tab.png" alt="terminal" class="note-close-tab-icon">
+        </div>
+        <div class="note-option2">
+            <h4><span style="text-decoration: underline">F</span>ile</h4>
+            <h4><span style="text-decoration: underline">E</span>dit</h4>
+            <h4><span style="text-decoration: underline">S</span>earch</h4>
+            <h4><span style="text-decoration: underline">H</span>elp</h4>
+        </div>
+            <embed src="Media/TPE.pdf" class="note-screen" style="width: 100%; height:100%; " frameborder="0"/>
+
+    </div>
+</body>
+</html>
+
